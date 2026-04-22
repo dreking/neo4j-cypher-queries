@@ -1,0 +1,51 @@
+// MATCHING ALL NODES
+MATCH (n)
+RETURN n
+
+// MATCH NODES WITH A SPECIFIC LABEL - GROUPING
+MATCH (n:Movie)
+RETURN n
+
+// MATCH NODES WITH SPECIFIC PROPERTIES
+MATCH (n {title: "The Matrix"})
+RETURN n
+
+// MATCH NODES WITH MULTIPLE LABELS AND SPECIFIC PROPERTIES
+MATCH (n:Movie:Action)
+MATCH (n:Movie:Action {title: "The Matrix"})
+RETURN n
+
+// MATCH NODES WITH A SPECIFIC LABEL AND RETURN ONLY THE PROPERTIES
+MATCH (n:Movie)
+RETURN n.title, n.release_year
+
+// MATCH ANY NODES WITH ANY RELATIONSHIPS
+MATCH (n)-[r]-(m)
+RETURN *
+
+// MATCH NODES WITH A SPECIFIC LABEL AND ANY RELATIONSHIPS
+MATCH (n:Person {name: "Tom Hanks"})-[r]-(m)
+RETURN *
+
+MATCH (n:Person {name: "Robert Zemeckis"})-[r]-(m:Movie)
+RETURN m
+
+MATCH (n:Person {name: "Robert Zemeckis"})-[r:DIRECTED]-(m:Movie)
+RETURN n, r, m
+
+MATCH (n:Movie {title: "The Polar Express"})<-[r]-(m)
+RETURN *
+
+// MATCH NODES WITH UNCOMMON CHARACTERS
+MATCH (`this is very good movie`) // Same as MATCH (n)
+RETURN `this is very good movie` // Same as RETURN n
+
+// COPYING PROPERTIES FROM ONE NODE TO ANOTHER
+MATCH (a:Movie {title: "V for Vendetta"})
+CREATE (b:Movie {title: "The Copycat", released: a.released})
+RETURN b
+
+// COPYING PROPERTIES FROM RELATIONSHIP TO ANOTHER
+CREATE (a:Person {name: "AB"})-[r1:KNOWS {since:2016}]->(b:Person {name: "BC"})
+CREATE (c:Person {name: "CC"})-[r2:KNOWS {since: r1.since}]->(b)
+RETURN *
