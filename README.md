@@ -11,8 +11,9 @@ Simple Cypher query files used while learning Neo4j and Cypher.
 
 This repo is a personal practice space for:
 
-- Creating nodes and relationships
-- Matching and returning graph data
+- CREATE clauses for nodes and relationships
+- MATCH clauses for querying graph data
+- RETURN clauses for specifying output
 - Trying small Cypher exercises
 
 ## Files
