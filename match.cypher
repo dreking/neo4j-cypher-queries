@@ -49,3 +49,29 @@ RETURN b
 CREATE (a:Person {name: "AB"})-[r1:KNOWS {since:2016}]->(b:Person {name: "BC"})
 CREATE (c:Person {name: "CC"})-[r2:KNOWS {since: r1.since}]->(b)
 RETURN *
+
+// MATCHING NODES WITH SPECIFIC PROPERTIES AND RELATIONSHIPS AND RETURNING THEM
+MATCH (a:Person {name: "AB"})-[r]-(b)
+RETURN b.name
+
+// MATCH MULTIPLE RELATIONSHIPS AND NODES
+MATCH (a:Person {name: "AB"})-[r:FAMILY_OF|RELATIVE_OF]-(b)
+RETURN a, r, b
+
+// MATCHING NODES AND CREATING RELATIONS
+MATCH (a:Person {name: "AB"}), (b:Person {name: "BC"})
+CREATE (a)-[r:KNOWS]->(b)-[r2:KNOWS]->(a)
+RETURN a, b, r, r2
+
+// MATCHING NODES WHERE ACTOR ACTED IN MOVIE AND DIRECTOR DIRECTED THE SAME MOVIE
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)<-[r2:DIRECTED]-(d:Person)
+RETURN a.name AS Actor, m.title AS Movie, d.name AS Director
+
+// MATCHING NODES WHERE AN ACTOR HAS CO-ACTORS ACTED IN ANY MOVIE
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN]->(m:Movie)<-[r2:ACTED_IN]-(coActor)
+RETURN a.name AS Actor, m.title AS Movie, coActor.name AS CoActor
+
+// OPTIONAL MATCHING - MATCHING NODES WITH OPTIONAL RELATIONSHIPS
+MATCH (a:Person {name: "Tom Hanks"})
+OPTIONAL MATCH (a)-[r:ACTED_IN]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
