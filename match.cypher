@@ -86,3 +86,9 @@ MATCH (n:Movie)
 RETURN n.title, n.released, n.rating
 ORDER BY n.released DESC, n.rating DESC
 // ORDER BY n.released, n.rating DESC
+
+// MATCHING NODES AND LIMITING THE NUMBER OF RESULTS
+MATCH (n:Movie)
+RETURN n.title, n.released
+ORDER BY n.released DESC
+LIMIT 5 // 2*5
