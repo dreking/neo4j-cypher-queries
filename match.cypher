@@ -90,3 +90,14 @@ RETURN a.name AS Actor, m.title AS Movie
 
 MATCH p= (a)-[*]->(m)<-[*]-(d)
 RETURN p
+
+// MATCHING - Zero length relationships
+// (*0 means zero is the left bound, *0.. means zero or more relationships, *0..3 means zero to three relationships)
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*0..]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
+
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*0..0]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
+
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*0..1]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
