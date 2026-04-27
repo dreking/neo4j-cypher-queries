@@ -75,37 +75,3 @@ RETURN a.name AS Actor, m.title AS Movie, coActor.name AS CoActor
 MATCH (a:Person {name: "Tom Hanks"})
 OPTIONAL MATCH (a)-[r:ACTED_IN]->(m:Movie)
 RETURN a.name AS Actor, m.title AS Movie
-
-// MATCHING NODES AND ORDER BY
-MATCH (n:Movie)
-RETURN n.title, n.released
-ORDER BY n.released DESC // ASC is the default
-
-// MATCHING NODES AND ORDER BY MULTIPLE PROPERTIES
-MATCH (n:Movie)
-RETURN n.title, n.released, n.rating
-ORDER BY n.released DESC, n.rating DESC
-// ORDER BY n.released, n.rating DESC
-
-// MATCHING NODES AND LIMITING THE NUMBER OF RESULTS
-MATCH (n:Movie)
-RETURN n.title, n.released
-ORDER BY n.released DESC
-LIMIT 5 // 2*5
-
-// MATCHING NODES AND SKIPPING THE FIRST N RESULTS
-MATCH (n:Movie)
-RETURN n.title, n.released
-ORDER BY n.released DESC
-SKIP 5
-LIMIT 5
-
-// UNION CLAUSE - COMBINING RESULTS OF MULTIPLE MATCHES - UNION ALL TO INCLUDE DUPLICATES
-MATCH (n:Movie)
-RETURN n.title AS Title
-UNION // ALL
-MATCH (n:Person)
-RETURN n.name AS Title
-UNION
-MATCH (n:Movie)
-RETURN n.title AS Title
