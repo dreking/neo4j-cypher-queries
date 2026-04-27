@@ -101,3 +101,9 @@ RETURN a.name AS Actor, m.title AS Movie
 
 MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*0..1]->(m:Movie)
 RETURN a.name AS Actor, m.title AS Movie
+
+// MATCHING - All shortest paths between two nodes
+MATCH (a:Movie {title: "Stand By Me"}),
+(b:Movie {title: "Cloud Atlas"}),
+p = allShortestPaths((a)-[*]-(b))
+RETURN p
