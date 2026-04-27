@@ -92,3 +92,10 @@ MATCH (n:Movie)
 RETURN n.title, n.released
 ORDER BY n.released DESC
 LIMIT 5 // 2*5
+
+// MATCHING NODES AND SKIPPING THE FIRST N RESULTS
+MATCH (n:Movie)
+RETURN n.title, n.released
+ORDER BY n.released DESC
+SKIP 5
+LIMIT 5
