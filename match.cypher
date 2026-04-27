@@ -99,3 +99,13 @@ RETURN n.title, n.released
 ORDER BY n.released DESC
 SKIP 5
 LIMIT 5
+
+// UNION CLAUSE - COMBINING RESULTS OF MULTIPLE MATCHES - UNION ALL TO INCLUDE DUPLICATES
+MATCH (n:Movie)
+RETURN n.title AS Title
+UNION // ALL
+MATCH (n:Person)
+RETURN n.name AS Title
+UNION
+MATCH (n:Movie)
+RETURN n.title AS Title
