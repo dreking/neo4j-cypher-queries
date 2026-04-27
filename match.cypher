@@ -75,3 +75,18 @@ RETURN a.name AS Actor, m.title AS Movie, coActor.name AS CoActor
 MATCH (a:Person {name: "Tom Hanks"})
 OPTIONAL MATCH (a)-[r:ACTED_IN]->(m:Movie)
 RETURN a.name AS Actor, m.title AS Movie
+
+// MATCHING - Variable length relationships
+// (*1..3 means 1 to 3 relationships, *1.. means 1 or more relationships, *0..3 means 0 to 3 relationships)
+// (* means any number of relationships, *1 means exactly 1 relationship, *..3 means 0 to 3 relationships)
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*1..3]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
+
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*1..]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
+
+MATCH (a:Person {name: "Tom Hanks"})-[r:ACTED_IN*0..3]->(m:Movie)
+RETURN a.name AS Actor, m.title AS Movie
+
+MATCH p= (a)-[*]->(m)<-[*]-(d)
+RETURN p
