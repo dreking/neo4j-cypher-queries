@@ -32,3 +32,21 @@ RETURN RANGE(0, 9)[-15..2] AS outOfBoundsSublist
 RETURN SIZE(RANGE(0, 9)) AS sizeOfRange
 WITH RANGE(0, 9) AS numbers
 RETURN SIZE(numbers) AS sizeOfRangeFromVariable
+
+// RANGE - List comprehension with RANGE
+RETURN [x IN RANGE(0, 9) | x] AS numbersList
+RETURN [x IN RANGE(0, 9) WHERE x=x] AS numbersListWithCondition
+RETURN [x IN RANGE(0, 9) WHERE x % 2 = 0 | x] AS evenNumbers
+RETURN [x IN RANGE(0, 9) WHERE x % 2 = 0 | x - 2] AS evenNumbersMinusTwo
+RETURN [x IN RANGE(0, 9) | x % 2] AS oddNumbers
+RETURN [x IN RANGE(0, 9) | x * 2] AS doubled
+RETURN [x IN RANGE(0,9) | x * x] AS squares, [x IN RANGE(0,9) | x] AS originalNumbers
+
+
+MATCH (n:Person{name: 'Tom Hanks'})
+RETURN [(n)-[]->(m) | m.title] AS moviesTomHanksActedIn
+RETURN [(n)-[]->(m) WHERE m.title CONTAINS 'a' | m.released] AS moviesTomHanksActedInWithAInTitle
+
+// RANGE - Pattern comprehension with RANGE
+MATCH (n:Person{name: 'Alice'})
+RETURN [(n)-[:KNOWS*1..3]->(friend) | friend.name] AS friendsNamesUpTo3Hops
