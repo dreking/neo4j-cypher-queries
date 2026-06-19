@@ -52,3 +52,18 @@ LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-exampl
 MERGE (s:Shipper {shipperID: shipper.shipperID})
 ON CREATE SET s.companyName = shipper.companyName, s.phone = shipper.phone
 RETURN s
+
+// LOAD CSV - Create nodes and relationships -> Suppliers and Products
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/suppliers.csv' AS supplier
+MERGE (s:Supplier {supplierID: supplier.supplierID, companyName: supplier.companyName})
+
+WITH supplier
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/products.csv' AS product
+MERGE (p:Product {productID: product.productID, supplierID: product.supplierID})
+ON CREATE SET p.productName = product.productName, p.unitPrice = toFloat(product.unitPrice), p.unitsInStock = toInteger(product.unitsInStock)
+
+WITH supplier, product
+MATCH (s:Supplier {supplierID: supplier.supplierID}), (p:Product {productID: product.productID})
+WHERE s.supplierID = p.supplierID
+MERGE (s)-[:SUPPLIES]->(p)
+RETURN *
