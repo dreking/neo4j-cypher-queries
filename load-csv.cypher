@@ -67,3 +67,29 @@ MATCH (s:Supplier {supplierID: supplier.supplierID}), (p:Product {productID: pro
 WHERE s.supplierID = p.supplierID
 MERGE (s)-[:SUPPLIES]->(p)
 RETURN *
+
+// LOAD CSV - Create nodes and relationships -> Orders, Shippers, and Customers, and Employees
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/orders.csv' AS order
+MERGE (o:Order {orderID: order.orderID, customerID: order.customerID, employeeID: order.employeeID, shipperID: order.shipVia})
+
+WITH order
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/shippers.csv' AS shipper
+MERGE (s:Shipper {shipperID: shipper.shipperID, companyName: shipper.companyName})
+
+WITH order, shipper
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/customers.csv' AS customer
+MERGE (c:Customer {customerID: customer.customerID, companyName: customer.companyName})
+
+WITH order, shipper, customer
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/neo4j-graph-examples/northwind/refs/heads/main/import/employees.csv' AS employee
+MERGE (e:Employee {employeeID: employee.employeeID, employeeName: employee.firstName + ' ' + employee.lastName})
+
+WITH order, shipper, customer, employee
+MATCH (o:Order {orderID: order.orderID})
+MATCH (s:Shipper {shipperID: shipper.shipVia})
+MATCH (c:Customer {customerID: customer.customerID})
+MATCH (e:Employee {employeeID: employee.employeeID})
+WHERE order.shipperID = shipper.shipperID AND order.customerID = customer.customerID AND order.employeeID = employee.employeeID
+MERGE (s)-[:DELIVERED]->(o)<-[:PLACED_BY]-(c)
+MERGE (e)-[:FULFILLED]->(o)
+RETURN *
